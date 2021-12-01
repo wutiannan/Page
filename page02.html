@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>分页列表2-刷新保留</title>
+    <link rel="stylesheet" href="./css/main.css" />
+  </head>
+  <body>
+    <div class="wrapper">
+      <ul class="news-content">
+        <!-- <li class="news-item">
+              <a href="" class="title"> ${news[i].title} </a>
+              <span>${news[i].updatetime}</span>
+            </li> -->
+      </ul>
+      <div class="pages-content">
+        <a href="javascript:;" class="next-page">加载更多</a>
+      </div>
+    </div>
+  </body>
+  <script src="./js/news.js"></script>
+  <script>
+    function $(selector) {
+      let el = document.querySelectorAll(selector);
+      if (el.length == 1) return el[0];
+      if (el.length > 1) return el;
+      else return false;
+    }
+    let newsContent = $(".news-content");
+    let btn = $(".next-page");
+
+    let page = 1; //默认页码为1
+    let listSize = 4; //每页展示4张图
+    let pageCount = Math.ceil(news.length / listSize);
+
+    page = getHash();
+    showList(page);
+
+    btn.addEventListener("click", function () {
+      page++;
+      if (page > pageCount) {
+        this.innerHTML = "没有更多数据";
+        return;
+      }
+      showList(page);
+      window.location.hash = page; //设置一个hash值
+    });
+
+    function showList(page) {
+      // page=1,showLen=4
+      // page=2,showLen=8
+      // page=3,showLen=12
+      // page=4,showLen=16
+      let showLen = page * listSize; //showLen为每页展示出来的的条数
+      //循环的时候不包含end
+      let html = "";
+      for (let i = 0; i < showLen && i < news.length; i++) {
+        html += `<li class="news-item">
+              <a href="" class="title"> ${news[i].title} </a>
+              <span>${news[i].updatetime}</span>
+            </li>`;
+      }
+      newsContent.innerHTML = html;
+    }
+
+    //获取hash值
+    function getHash() {
+      let hash = window.location.hash;
+      if (hash.includes("#")) {
+        hash = hash.substring(1); //从第一个渠道后面所有的
+      } else {
+        hash = 1; //默认hash值为1
+      }
+      return hash;
+    }
+  </script>
+</html>

@@ -7,6 +7,9 @@ ul,
 li {
   list-style-type: none;
 }
+a {
+  text-decoration: none;
+}
 .wrapper {
   width: 1200px;
   margin: 0 auto;
@@ -39,25 +42,27 @@ li {
 }
 
 .pages-content {
-    display: flex;
-    margin-top: 20px;
-    border: 1px solid #999;
+  display: flex;
+  margin-top: 20px;
+  border: 1px solid #999;
 }
 .pages-content a {
-  display: inline-block;
-  text-decoration: none;
+  display: block;
   color: #999;
   padding: 5px 10px;
 }
-.pages-content li:not(:last-child) a{
-    border-right: 1px solid #999;
+.pages-content li:not(:last-child) a {
+  border-right: 1px solid #999;
 }
 
-.pages-content a.active{
-    background-color: #333;
-    color: #fff;
+.pages-content a.active {
+  background-color: #333;
+  color: #fff;
 }
-.pages-content a:hover{
-    background-color: #f60;
-    color: #fff;
+.pages-content a:hover {
+  background-color: #f60;
+  color: #fff;
+}
+.page-num-content{
+  display: flex;
 }
