@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>分页列表5-刷新保留带省略号</title>
+    <link rel="stylesheet" href="./css/main.css" />
+  </head>
+
+  <body>
+    <div class="wrapper">
+      <ul class="news-content">
+        <!-- <li class="news-item">
+          <a href="" class="title"> 新闻列表1 </a>
+          <span>2021-11-30</span>
+        </li> -->
+      </ul>
+      <ul class="pages-content">
+        <li class="first-page active"><a href="">首页</a></li>
+        <li class="last-page"><a href="">上一页</a></li>
+        <li class="page-num-content"></li>
+        <li class="next-page"><a href="">下一页</a></li>
+      </ul>
+    </div>
+  </body>
+  <script src="./js/news.js"></script>
+  <script>
+    function $(selector) {
+      let el = document.querySelectorAll(selector);
+      if (el.length == 1) return el[0];
+      if (el.length > 1) return el;
+      else return false;
+    }
+    let newsContent = $(".news-content");
+    let pagesContent = $(".pages-content");
+
+    let page = 1; //默认页码为1
+    let listSize = 3; //每页展示4条新闻
+    let pageCount = Math.ceil(news.length / listSize); //总页码数
+
+    url = getUrl();
+    //如果网址有传入page,就替换到page
+    if (url.page) {
+      page = parseInt(url.page);
+    }
+    showList(page);
+    showPage(page);
+
+    //获取网址上的参数,返回对象
+    function getUrl() {
+      let obj = {};
+      let search = window.location.search; //?pageIndex=2&page=2
+      if (search.includes("?")) {
+        //去掉问号，取问号后面的
+        search = search.substr(1); //"pageIndex=2&page=2"
+        //拆分参数组
+        let arrSearch = search.split("&"); //["pageIndex=2","page=2"]
+        arrSearch.forEach((item) => {
+          if (item.includes("=")) {
+            let arrItem = item.split("="); //["pageIndex","2"] ["page","2"]
+            let key = arrItem[0]; //"pageIndex","page"
+            let value = arrItem[1]; //"2","2"
+            obj[key] = value;//obj={pageIndex: '2', page: '2'}
+          }
+        });
+      }
+      return obj;
+    }
+
+    function showList(page) {
+      // page=1,start=0 end=4
+      // page=2,start=4 end=8
+      // page=3,start=8 end=12
+      // page=4,start=12 end=16
+      let start = (page - 1) * listSize;
+      let end = page * listSize;
+      //循环的时候不包含end
+      let html = "";
+      for (let i = start; i < end && i < news.length; i++) {
+        html += `<li class="news-item">
+              <a href="" class="title"> ${news[i].title} </a>
+              <span>${news[i].updatetime}</span>
+            </li>`;
+      }
+      newsContent.innerHTML = html;
+    }
+    function showPage(page) {
+      let html = "";
+      //首页
+      html += `<li><a href="?page=1">首页</a></li>`;
+      //文字上一页
+      html += `<li><a href="?page=${
+        page > 1 ? page - 1 : page
+      }">上一页</a></li>`;
+      //数字1
+      if (page > 2) html += `<li><a href="?page=1">1</a></li>`;
+      //前一个省略号
+      if (page > 3) html += `<li><a href="">...</a></li>`;
+      //前一个数字
+      if (page > 1)
+        html += `<li><a href="?page=${page - 1}">${page - 1}</a></li>`;
+
+      //当前页
+      html += `<li><a class="active" href="?page=${page}">${page}</a></li>`;
+
+      //后一个数字
+      if (page < pageCount)
+        html += `<li><a href="?page=${page + 1}">${page + 1}</a></li>`;
+      //省略号
+      if (page < pageCount - 2) html += `<li><a href="">...</a></li>`;
+      //数字尾页
+      if (page < pageCount - 1)
+        html += `<li><a href="?page=${pageCount}">${pageCount}</a></li>`;
+      //文字下一页
+      html += `<li><a href="?page=${
+        page < pageCount ? page + 1 : page
+      }">下一页</a></li>`;
+      //尾页
+      html += `<li><a href="?page=${pageCount}">尾页</a></li>`;
+      pagesContent.innerHTML = html;
+    }
+  </script>
+</html>
