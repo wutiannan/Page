@@ -1,2 +1,2 @@
-# Page
-原生js实现分页列表
+# javascript-exercises
+原生js实现的一些小模块
